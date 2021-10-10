@@ -1,0 +1,6 @@
+[luaibase_server]
+35.164.43.91
+
+[luaibase_server:vars]
+ansible_ssh_user=ubuntu
+ansible_ssh_private_key_file=~/.ssh/MyKeyPair.pem

@@ -1,0 +1,27 @@
+- become: 'yes'
+  hosts: luaibase_server
+  name: instalacao-apache
+  tasks:
+    - name: criar user chamado sam e adicionar no grupo 'sudo'
+      user:
+        name: sam
+        group: sudo
+    - name: add arquivo ssh no sam
+      authorized_key:
+        user: ubuntu
+        state: present
+        key: "{{ lookup('file','~/.ssh/MyKeyPair.pub') }}" 
+    - name: update instance
+      apt:
+        upgrade: dist
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: install apache2
+      apt: name=apache2 update_cache=yes state=present
+    - name: ativar module rewrite engine
+      apache2_module: name=rewrite state=present
+      notify: Restart apache2
+
+  handlers: 
+    - name: Restart apache2
+      service: name=apache2 state=restart
